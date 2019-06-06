@@ -12,43 +12,45 @@ public class PlayerController : MonoBehaviour
     private float currentMovementSpeed;
 
     [HideInInspector]
-    public bool isCharging;
+    public bool isCharging, isFullCharge, isMoving;
 
     //[HideInInspector]
     public float currentCharge;
 
     private Rigidbody myRigid;
 
+    [HideInInspector]
+    public PlayerStatus status;
+
     private void Start()
     {
         myRigid = GetComponent<Rigidbody>();
+        status = GetComponent<PlayerStatus>();
     }
 
     private void Update()
     {
 
         if (currentCharge > 0)
-        {
             currentMovementSpeed = MovementSpeed[0];
-        }
 
         if (currentCharge > 500)
-        {
             currentMovementSpeed = MovementSpeed[1];
-        }
 
         if (currentCharge == 1000)
-        {
-            
-
             currentCharge = 1001;
+
+        if (currentCharge == 1001)
+        {
+            isFullCharge = true;
+            currentMovementSpeed = MovementSpeed[2];
         }
 
-        if(currentCharge == 1001)
-            currentMovementSpeed = MovementSpeed[2];
-
         if (Input.GetMouseButtonDown(0))
+        {
+            isFullCharge = false;
             isCharging = true;
+        }
 
         if (Input.GetMouseButtonUp(0))
             Discharge();
@@ -60,6 +62,14 @@ public class PlayerController : MonoBehaviour
 
             myRigid.velocity *= 0.95f;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        if (myRigid.velocity.magnitude > 0.3f)
+            isMoving = true;
+        else
+            isMoving = false;
     }
 
     void Discharge()
