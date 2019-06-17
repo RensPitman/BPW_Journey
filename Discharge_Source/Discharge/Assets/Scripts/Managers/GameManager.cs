@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     static GameManager manager;
     static GameplayManager gameplay;
     static PlayerManager player;
+    static IngameInterfaceManager ui;
 
     public static GameManager Manager
     {
@@ -38,6 +39,17 @@ public class GameManager : MonoBehaviour
                 player = FindObjectOfType<PlayerManager>();
 
             return player;
+        }
+    }
+
+    public static IngameInterfaceManager UI
+    {
+        get
+        {
+            if (ui == null)
+                ui = FindObjectOfType<IngameInterfaceManager>();
+
+            return ui;
         }
     }
 }
