@@ -11,6 +11,16 @@ public class BoosterBehaviour : MonoBehaviour
 
     private bool isActive;
 
+    [Header ("Gate")]
+    public TriggerBehaviour MyTrigger;
+    public GameObject GateObj;
+
+    public void OpenGate()
+    {
+        MyTrigger.enabled = true;
+        GateObj.SetActive(true);
+    }
+
     public void Boost()
     {
         if (!isActive)

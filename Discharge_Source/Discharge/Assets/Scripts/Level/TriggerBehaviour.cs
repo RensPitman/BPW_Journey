@@ -7,6 +7,7 @@ public class TriggerBehaviour : MonoBehaviour
 {
     public bool OneShot;
     public Vector3 Size;
+    public Vector3 Offset;
     public LayerMask PlayerMask;
     public UnityEvent OnTriggerActive;
 
@@ -14,13 +15,16 @@ public class TriggerBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(!hasBeenActive)
-            CheckTrigger();
+        if (GameManager.Gameplay.CurrentZone.isFinish)
+        {
+            if (!hasBeenActive)
+                CheckTrigger();
+        }
     }
 
     void CheckTrigger()
     {
-        Collider[] coll = Physics.OverlapBox(transform.position, Size, Quaternion.identity, PlayerMask);
+        Collider[] coll = Physics.OverlapBox(transform.position + Offset, new Vector3(Size.x / 2, Size.y / 2, Size.z / 2), Quaternion.identity, PlayerMask);
 
         if(coll.Length > 0)
         {
@@ -34,6 +38,6 @@ public class TriggerBehaviour : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position, Size);
+        Gizmos.DrawWireCube(transform.position + Offset, Size);
     }
 }

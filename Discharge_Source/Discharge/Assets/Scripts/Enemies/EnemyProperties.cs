@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EZCameraShake;
 
 public class EnemyProperties : MonoBehaviour
 {
+    public GameObject BurstPrefab;
+
     [Header("Hitbox")]
     public float Radius;
     public LayerMask HitMask;
@@ -21,6 +24,9 @@ public class EnemyProperties : MonoBehaviour
         {
             if (hitPlayer.isMoving)
             {
+                GameObject obj = Instantiate(BurstPrefab, transform.position, Quaternion.identity);
+
+                CameraShaker.Instance.ShakeOnce(2, 15, 0, 1);
                 Destroy(this.gameObject);
             }
         }

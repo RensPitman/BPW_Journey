@@ -25,17 +25,18 @@ public class IngameInterfaceManager : MonoBehaviour
             InstructionOneGroup.alpha = 1;
             StartCoroutine(WaitForText());
 
+            FocusTarget = GameManager.Player.CurrentPlayer.transform;
+
             GameManager.Player.CurrentCamera.AllowFollow = false;
         }
     }
 
     private void Update()
     {
-        if (FocusTarget == null)
-        {
-            GameManager.Player.PlayerIsCameraTarget();
-            Close();
-        }
+
+        if(InstructionTwoGroup.alpha == 1)
+            if (GameManager.Gameplay.CurrentZone.AllEnemies.Count == 0)
+                Close();
     }
 
     public void StartInstruction(int index)

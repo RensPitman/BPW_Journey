@@ -35,9 +35,35 @@ public class PlayerManager : MonoBehaviour
         GameObject player = (GameObject)Instantiate(PlayerPrefab, Vector3.zero, Quaternion.identity);
 
         // Set Camera Target.
-        CurrentCamera.Target = player.transform;
+        //CurrentCamera.Target = player.transform;
 
         CurrentPlayer = player.GetComponent<PlayerController>();
+    }
+
+    public void OnPlayerDeath()
+    {
+        // Hide player (Death)
+        CurrentPlayer.AllowControl = false;
+        CurrentPlayer.gameObject.SetActive(false);
+        CurrentPlayer.transform.eulerAngles = Vector3.zero;
+        CurrentPlayer.myRigid.velocity = Vector3.zero;
+        // Small delay before reset.
+        StartCoroutine(WaitForRespawn());
+        
+    }
+
+    IEnumerator WaitForRespawn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        // Destroy all enemies in zone.
+        GameManager.Gameplay.CurrentZone.DestroyAllEnemies();
+        // Move player to center zone.
+        CurrentPlayer.transform.position = new Vector3(GameManager.Gameplay.CurrentZone.transform.position.x, CurrentPlayer.transform.position.y, GameManager.Gameplay.CurrentZone.transform.position.z);
+        // Show player (Respawn)
+        CurrentPlayer.AllowControl = true;
+        CurrentPlayer.gameObject.SetActive(true);
+        // respawn enemies.
+        GameManager.Gameplay.CurrentZone.SpawnEnemies();
     }
 
     public void PlayerIsCameraTarget()
